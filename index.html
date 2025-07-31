@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>No Fights ❤️</title>
+<style>
+  body { font-family: sans-serif; background: #ffe6ec; text-align: center; padding: 20px; }
+  h1 { color: #ff3366; font-size: 2em; }
+  img { width: 180px; border-radius: 12px; margin-top: 10px; }
+  .counter { font-size: 3em; margin: 20px 0; color: #333;}
+  .milestone { font-size: 1.25em; color: #ff3366; margin-bottom: 20px; }
+  button { background: #ff3366; color: white; border: none; padding: 12px 24px; margin: 6px; border-radius: 8px; font-size: 1em; cursor: pointer;}
+  button:hover { background: #cc2952; }
+  ul { list-style: none; padding: 0; font-size: 0.9em; color: #555; }
+</style>
+</head>
+<body>
+  <h1>No Fights ❤️</h1>
+  <img src="us.jpg" alt="Us" style="max-width: 250px; border-radius: 10px;">
+  <div class="counter" id="dayCount"></div>
+  <div class="milestone" id="milestones"></div>
+  <button onclick="flipCoin()">Flip Coin 🎲</button>
+  <button onclick="resetCounter()">Reset to 0</button>
+  <h3>Reset History:</h3>
+  <ul id="resetHistory"></ul>
+
+  <script>
+    let startDate = new Date("2025-07-10");
+    let resetDates = JSON.parse(localStorage.getItem("resetHistory") || "[]");
+
+    function update() {
+      const now = new Date();
+      const diff = Math.floor((now - startDate) / (1000*60*60*24));
+      document.getElementById("dayCount").innerText = diff + " days strong ❤️";
+
+      let milestone = "";
+      if (diff === 100) milestone = "🌴 Weekend getaway time!";
+      else if (diff === 30) milestone = "🍷 Dinner date night!";
+      else if (diff === 10) milestone = "🎲 Flip a coin — tails gets to ask for anything 😘";
+      document.getElementById("milestones").innerText = milestone;
+
+      renderHistory();
+    }
+
+    function flipCoin() {
+      const r = Math.random() < 0.5 ? "Heads 😇" : "Tails 😏 (you get to ask for anything!)";
+      alert("Coin flip: " + r);
+    }
+
+    function resetCounter() {
+      if (!confirm("Reset streak to 0?")) return;
+      const today = new Date().toLocaleDateString();
+      resetDates.push(today);
+      localStorage.setItem("resetHistory", JSON.stringify(resetDates));
+      startDate = new Date();
+      alert("Counter reset!");
+      update();
+    }
+
+    function renderHistory() {
+      const list = resetDates.map(d => `<li>${d}</li>`).join("");
+      document.getElementById("resetHistory").innerHTML = list;
+    }
+
+    update();
+  </script>
+</body>
+</html>
